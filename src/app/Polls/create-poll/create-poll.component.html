@@ -95,10 +95,6 @@
           <h2 class="text-center text-primary pt-3">
             Criteria
           </h2>
-          <!-- <div class="btn-group btn-vertical-group">
-               <input type="radio" name="c" checked value="byDomain" id="byDomain"> By Domain
-               <input type="radio" name="c" value="byEmail" id="byEmail"> By Email
-           </div>-->
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">By Domain</label>
             <div class="cols-md-3">
@@ -107,21 +103,26 @@
                 <textarea class="form-control" id="domain"  placeholder="Domain Addresses must be Comma, Space or Line Separated!" formControlName="pollCriteria_domain"></textarea>
               </div>
             </div>
-              <div *ngIf="!areDomainsValid && !isCriteriaEmpty" class="text-danger">*  Domain Addresses must be Comma, Space or Line Separated!</div>
+              <div *ngIf="!areDomainsValid && !isCriteriaEmpty" class="text-danger">*  Domain Addresses must be valid and Comma, Space or Line Separated!</div>
+            <input multiple #file name="domain" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+                   (change)="onFileSelected(file.files,$event)">
           </div>
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">By Email</label>
             <div class="cols-md-3">
               <div class="input-group">
                 <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons"></span>
-                <textarea class="form-control" id="email"  placeholder="Emails" formControlName="pollCriteria_emails"
+                <textarea class="form-control" id="email" formControlName="pollCriteria_emails"
                 placeholder="Email Addresses must be Comma, Space or Line Separated!">
                 </textarea>
 
               </div>
             </div>
-            <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be Comma, Space or Line Separated!</div>
+            <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be valid and Comma, Space or Line Separated!</div>
             <div *ngIf="isCriteriaEmpty" class="text-danger">*  Either domains or emails must be specified!</div>
+            <input multiple #file name="email" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+                   (change)="onFileSelected(file.files,$event)">
+            <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
           </div>
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">Start Date and Time</label>

@@ -50,7 +50,14 @@
           <div [hidden]="!registerForm.controls['phone'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
         </div>
       </div>
-      <button class="btn btn-primary btn-block btn-lg text-center" id="RegisterBtn" type="button" (click)="Register()" [disabled]="!registerForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Sign Up</button>
+      <div class="form-group">
+        <input type="file" #filePicker (change)="onImagePicked($event)" accept="image/*">
+        <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && registerForm.get('image').valid">
+          <img class="img-fluid" [src]="imagePreview" [alt]="registerForm.value.title">
+        </div>
+        <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg text-center" id="RegisterBtn" type="button" (click)="Register()" [disabled]="!registerForm.valid || isLoading || !imagePreview"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Sign Up</button>
       <div class="form-group">
         <div class="text-center mt-3" id="loading" *ngIf="isLoading"><img alt="" height="100" src="../../../assets/img/loading2.gif" width="100"></div>
       </div>

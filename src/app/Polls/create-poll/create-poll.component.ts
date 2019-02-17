@@ -14,7 +14,7 @@ import {AuthService} from '../../Auth/auth.service';
   styleUrls: ['./create-poll.component.css']
 })
 export class CreatePollComponent implements OnInit {
-  pollForm: FormGroup;
+  public pollForm: FormGroup;
   isLoading = false;
   isEditMode = false;
   public dateTimeRange: Date[] = new Array<Date>();
@@ -24,6 +24,7 @@ export class CreatePollComponent implements OnInit {
   public areDomainsValid = true;
   public areEmailsValid = true;
   public isCriteriaEmpty = false;
+  message: string;
   constructor(private pollService: PollService, private authService: AuthService , private router: Router, private route: ActivatedRoute) { }
   getControls() {
     return (<FormArray> this.pollForm.get('options')).controls;
@@ -171,5 +172,35 @@ export class CreatePollComponent implements OnInit {
   }
   deleteOption(index: number) {
     (<FormArray>this.pollForm.get('options')).removeAt(index);
+  }
+  onFileSelected(files, event) {
+
+    if (files.length === 0) {
+      return;
+    }
+
+    let fileData = '';
+    for(let file of files) {
+      const mimeType = file.type;
+      const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt|.doc|.docx|.xls|.xlsx)$/;
+      if (!regex.test(file.name.toLowerCase())) {
+          this.message = 'Only text, excel, word file is supported.';
+        return;
+      } else {
+        this.message = '';
+      }
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        fileData = fileData + reader.result;
+        if(event.target.name === 'domain')
+        {
+          this.pollForm.patchValue({'pollCriteria_domain': fileData});
+        }
+        if(event.target.name === 'email') {
+          this.pollForm.patchValue({'pollCriteria_emails': fileData});
+        }
+      };
+    }
   }
 }
