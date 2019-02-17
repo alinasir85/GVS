@@ -1,0 +1,9 @@
+.navbar {
+  box-shadow: 2px 2px 8px rgba(220, 53, 69, 0.9), 4px 4px 8px rgba(0, 123, 255, 0.9), 6px 6px 8px #00b22d;
+  opacity: 1;
+  background: #fff; }
+.navbar .nav-item {
+  font-size: 1.4rem;
+  padding-right: 20px; }
+.navbar .nav-item .nav-link:hover {
+  color: rgba(0, 123, 255, 0.9); }

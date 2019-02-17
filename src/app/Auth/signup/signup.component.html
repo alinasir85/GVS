@@ -1,0 +1,59 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title justify-content-center" id="modal-basic-title">Register</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true" style="color: darkred">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="registerForm">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text"><img src="../../../assets/img/icons/user.png" class="addon-icons"></span>
+          <input class="form-control" id="registerName" name="name" placeholder="Name" formControlName="name" type="text">
+        </div>
+        <div *ngIf="registerForm.controls['name'].errors && registerForm.controls['name'].touched">
+          <div [hidden]="!registerForm.controls['name'].errors.required" class="text-danger">* Name is required.</div>
+          <div [hidden]="!registerForm.controls['name'].errors.pattern" class="text-danger">* Name must be alphabetical.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons"></span>
+          <input class="form-control" id="registerEmail" name="email" placeholder="Email" formControlName="email" type="email">
+        </div>
+        <div *ngIf="registerForm.controls['email'].errors && registerForm.controls['email'].touched">
+          <div [hidden]="!registerForm.controls['email'].errors.required" class="text-danger">* Email is required.</div>
+          <div [hidden]="!registerForm.controls['email'].errors.pattern" class="text-danger">* Email is invalid.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text"><img src="../../../assets/img/icons/password.png" class="addon-icons"></span>
+          <input class="form-control" id="registerPassword" name="password" placeholder="Password" formControlName="password" type="password">
+        </div>
+        <div *ngIf="registerForm.controls['password'].errors && registerForm.controls['password'].touched">
+          <div [hidden]="!registerForm.controls['password'].errors.required" class="text-danger">* Password is required.</div>
+          <div [hidden]="!registerForm.controls['password'].errors.minlength" class="text-danger">* Minimum 8 characters</div>
+          <div [hidden]="!registerForm.controls['password'].errors.pattern" class="text-danger">* Must be alphanumeric.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text"><img src="../../../assets/img/icons/phone.png" class="addon-icons"></span>
+          <input class="form-control" id="registerPhone" name="phone" placeholder="Phone" formControlName="phone" type="text">
+        </div>
+        <div *ngIf="registerForm.controls['phone'].errors && registerForm.controls['phone'].touched">
+          <div [hidden]="!registerForm.controls['phone'].errors.required" class="text-danger">* Phone Number is required.</div>
+          <div [hidden]="!registerForm.controls['phone'].errors.pattern" class="text-danger">* Numbers only.</div>
+          <div [hidden]="!registerForm.controls['phone'].errors.minlength" class="text-danger">* Must be 11 digits.</div>
+          <div [hidden]="!registerForm.controls['phone'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg text-center" id="RegisterBtn" type="button" (click)="Register()" [disabled]="!registerForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Sign Up</button>
+      <div class="form-group">
+        <div class="text-center mt-3" id="loading" *ngIf="isLoading"><img alt="" height="100" src="../../../assets/img/loading2.gif" width="100"></div>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,13 @@
+<form [formGroup]="optionForm" (ngSubmit)="onSubmit()">
+<div *ngFor="let option of options; let i = index">
+<hr>
+<div class="row">
+  <div class="col-md-1" *ngIf="isCastVotePolls || votedOptionId===option.id"><input type="radio" class="radio"  [value]="option" formControlName="option" [checked]="votedOptionId===option.id"></div>
+  <div class="col-md-3 col-sm-3"><h5 class="d-inline-block">Title: </h5><span>{{option.title}}</span></div>
+  <div class="col-md-3 col-sm-4"><h5  class="d-inline-block">Description: </h5><span>{{option.description}}</span></div>
+  <div class="col-md-3 col-sm-3"><h5  class="d-inline-block">Vote Count: </h5><span>{{option.voteCount}}</span></div>
+  <div class="col-md-2" *ngIf="isMax && i==0 && isPollEnded"><img src="../../../assets/img/winner.gif" width="150" height="130"></div>
+</div>
+</div>
+  <button type="submit" class="btn-block btn-lg btn-primary mt-3" [disabled]="!optionForm.valid" *ngIf="isCastVotePolls"><img src="../../../assets/img/icons/vote.png" class="addon-icons pr-1">VOTE</button>
+</form>

@@ -1,0 +1,22 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title"  id="modal-basic-title">Verify Code</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true" style="color: darkred">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="verifyCodeForm">
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-text"><img src="../../../assets/img/icons/password.png" class="addon-icons"></span>
+          <input class="form-control" id="verificationCode" name="code" placeholder="Enter Code" formControlName="code" type="text">
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block btn-lg text-center" id="verifyCodeBtn" (click)="verifyCode()" type="button" [disabled]="!verifyCodeForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Submit</button>
+      <div class="form-group">
+        <div class="text-center mt-3" id="loading" *ngIf="isLoading"><img alt="" height="100" src="../../../assets/img/loading2.gif" width="100"></div>
+      </div>
+    </form>
+  </div>
+</ng-template>

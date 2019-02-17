@@ -1,0 +1,62 @@
+<nav *ngIf="!isHome" class="navbar navbar-expand-md navbar-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#index.html">
+      <img alt="" height="40" src="../../../assets/img/logoTrans.png" width="90">
+    </a>
+    <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed" data-target="#navbarsDefault" aria-controls="navbarsDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
+      <ul class="navbar-nav ml-auto" (click)="isNavbarCollapsed = !isNavbarCollapse">
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer" (click)="login()">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer"  href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer" href="#mission">Mission</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer" href="#authors">Team</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer" href="#contact">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<nav *ngIf="isHome" class="navbar navbar-expand-md navbar-light fixed-top">
+  <div class="container">
+    <a class="navbar-brand">
+      <img src="../../../assets/img/logoTrans.png" width="90">
+    </a>
+    <ul class="ml-2 navbar-nav ml-auto">
+    <li class="nav-item">
+      <a  class="nav-link" title="notifications" style="cursor: pointer" (click)="notifications()">
+        <img src="../../../assets/img/icons/notification.gif" class="notifaction-icon" alt="notification">
+      </a>
+    </li>
+    </ul>
+    <button class="navbar-toggler hidden-sm-up" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed" data-target="#navbars2" aria-controls="navbars2" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbars2">
+      <ul class="navbar-nav ml-auto" (click)="isNavbarCollapsed = !isNavbarCollapsed">
+        <li class="nav-item">
+          <a  class="nav-link" style="cursor: pointer" [routerLink]="['/home']">Home</a>
+        </li>
+        <li class="nav-item">
+          <a  class="nav-link" style="cursor: pointer" (click)="profile()">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a id="Logout" style="cursor: pointer" class="nav-link" (click)="logOut()">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<app-login></app-login>
+<app-signup></app-signup>
+<app-verify-code></app-verify-code>

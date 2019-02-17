@@ -1,0 +1,35 @@
+<ngb-accordion [closeOthers]="true">
+  <div *ngFor="let poll of polls; let i= index">
+    <ngb-panel [id]="poll.id">
+      <ng-template ngbPanelTitle>
+        <span *ngIf="getCurrentDate() < Date(poll.endTime)">
+        <h3 class="text-center font-weight-bold text-capitalize"> {{poll.title}}</h3>
+        <span class="text-dark float-right w-100">
+          <app-countdown [text]="text" [units]="units" (reached)="dateReached($event)"  [end]="poll.endTime">
+          </app-countdown>
+        </span>
+        </span>
+        <span *ngIf="getCurrentDate() > Date(poll.endTime)">
+        <h3 class="float-left font-weight-bold text-capitalize"> {{poll.title}}</h3>
+        <span class="text-dark float-right">
+          <h2>ENDED</h2>
+        </span>
+        </span>
+      </ng-template>
+      <ng-template ngbPanelContent>
+      <div class="container">
+        <div *ngIf="isCreatedPolls" class="float-right">
+          <button class="btn btn-warning pr-2 mr-2" (click)="onEdit(poll)">Edit</button><button class="btn btn-danger" (click)="onDelete(poll.id)">Delete</button>
+        </div>
+        <b>Outline:</b> {{poll.question_outline}} <br>
+        <b>Description:</b> {{poll.description}}<br>
+        <b>Start Time:</b> {{Date(poll.startTime).toDateString()}} <span class="pr-2"></span> {{Date(poll.startTime).toLocaleTimeString("en-us")}} <br>
+        <b>End <span class="pr-2"></span> Time: </b> {{Date(poll.endTime).toDateString()}}<span class="pr-2"></span> {{Date(poll.endTime).toLocaleTimeString()}} <br><br>
+        <h1 class="text-center mb-4 text-primary">Options</h1>
+        <app-option [poll]="poll" [pollIndex]="i"></app-option>
+      </div>
+    </ng-template>
+  </ngb-panel>
+  </div>
+</ngb-accordion>
+

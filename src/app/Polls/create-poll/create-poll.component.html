@@ -1,0 +1,185 @@
+<div class="container content pt-3 pb-3">
+  <div class="row main justify-content-center mt-2">
+    <div class="col-md-8 col-sm-12 p-5 bg-white rounded-top" id="createPoll">
+      <form [formGroup]="pollForm"  (ngSubmit)="onSubmit()">
+        <div class="project">
+          <h2 class="text-center text-primary">
+            Poll Details
+          </h2>
+          <div class="form-group">
+            <label for="title" class="cols-sm-2 control-label">Title</label>
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/title.png" class="addon-icons"></span>
+                <input type="text" class="form-control" name="title" id="title"  placeholder="Enter Title" formControlName="title"/>
+              </div>
+            <div *ngIf="pollForm.controls['title'].errors && pollForm.controls['title'].touched">
+              <div [hidden]="!pollForm.controls['title'].errors.required" class="text-danger">* Title is required.</div>
+              <div [hidden]="!pollForm.controls['title'].errors.pattern" class="text-danger">* Title must be alphanumeric.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="outline" class="cols-sm-2 control-label">Outline</label>
+            <div class="cols-sm-10">
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/outline.png" class="addon-icons"></span>
+                <input type="text" class="form-control" name="outline" id="outline"  placeholder="Outline" formControlName="question_outline"/>
+              </div>
+            </div>
+            <div *ngIf="pollForm.controls['question_outline'].errors && pollForm.controls['question_outline'].touched">
+              <div [hidden]="!pollForm.controls['question_outline'].errors.required" class="text-danger">* Outline is required.</div>
+              <div [hidden]="!pollForm.controls['question_outline'].errors.pattern" class="text-danger">* Outline must be alphanumeric.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description" class="cols-sm-2 control-label">Description</label>
+            <div class="cols-sm-10">
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/description.png" class="addon-icons"></span>
+                <input type="text" class="form-control" name="description" id="description"  placeholder="Description" formControlName="description"/>
+              </div>
+            </div>
+            <div *ngIf="pollForm.controls['description'].errors && pollForm.controls['description'].touched">
+              <div [hidden]="!pollForm.controls['description'].errors.required" class="text-danger">* Decription is required.</div>
+              <div [hidden]="!pollForm.controls['description'].errors.pattern" class="text-danger">* Description must be alphanumeric.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="candidates">
+          <h2 class="text-center text-primary pb-3">
+            Options
+          </h2>
+          <button type="button" class="btn btn-primary mb-2" (click)="addOption()">+</button>
+          <div class="row" formArrayName="options">
+            <div class="col">
+            <div class="row" *ngFor="let optionCtrl of getControls(); let i = index" [formGroupName]="i">
+              <div class="col-md-5 col-sm-5">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-text">
+                      <img src="../../../assets/img/icons/title.png" class="addon-icons">
+                    </div>
+                    <input type="text" class="form-control"  placeholder="Option" formControlName="optName">
+                  </div>
+                  <div *ngIf="optionCtrl.controls['optName'].errors && optionCtrl.controls['optName'].touched">
+                    <div [hidden]="!optionCtrl.controls['optName'].errors.required" class="text-danger">* Name is required.</div>
+                    <div [hidden]="!optionCtrl.controls['optName'].errors.pattern" class="text-danger">* Name must be alphanumeric.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-sm-6">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-text">
+                      <img src="../../../assets/img/icons/description.png" class="addon-icons">
+                    </div>
+                    <input type="text" class="form-control" placeholder="Description" formControlName="optDescription">
+                  </div>
+                  <div *ngIf="optionCtrl.controls['optDescription'].errors && optionCtrl.controls['optDescription'].touched">
+                    <div [hidden]="!optionCtrl.controls['optDescription'].errors.required" class="text-danger">* Description is required.</div>
+                    <div [hidden]="!optionCtrl.controls['optDescription'].errors.pattern" class="text-danger">* Description must be alphanumeric.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-1 col-sm-1">
+                <div class="form-group">
+                  <button type="button" *ngIf="i>1" class="btn btn-danger" (click)="deleteOption(i)">X</button>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="criteria">
+          <h2 class="text-center text-primary pt-3">
+            Criteria
+          </h2>
+          <!-- <div class="btn-group btn-vertical-group">
+               <input type="radio" name="c" checked value="byDomain" id="byDomain"> By Domain
+               <input type="radio" name="c" value="byEmail" id="byEmail"> By Email
+           </div>-->
+          <div class="form-group">
+            <label for="domain" class="cols-md-2 control-label">By Domain</label>
+            <div class="cols-md-3">
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/domain.png" class="addon-icons"></span>
+                <textarea class="form-control" id="domain"  placeholder="Domain Addresses must be Comma, Space or Line Separated!" formControlName="pollCriteria_domain"></textarea>
+              </div>
+            </div>
+              <div *ngIf="!areDomainsValid && !isCriteriaEmpty" class="text-danger">*  Domain Addresses must be Comma, Space or Line Separated!</div>
+          </div>
+          <div class="form-group">
+            <label for="domain" class="cols-md-2 control-label">By Email</label>
+            <div class="cols-md-3">
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons"></span>
+                <textarea class="form-control" id="email"  placeholder="Emails" formControlName="pollCriteria_emails"
+                placeholder="Email Addresses must be Comma, Space or Line Separated!">
+                </textarea>
+
+              </div>
+            </div>
+            <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be Comma, Space or Line Separated!</div>
+            <div *ngIf="isCriteriaEmpty" class="text-danger">*  Either domains or emails must be specified!</div>
+          </div>
+          <div class="form-group">
+            <label for="domain" class="cols-md-2 control-label">Start Date and Time</label>
+            <div class="input-group">
+                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons"></div>
+              <div class="input-wrapper">
+            <input [owlDateTimeTrigger]="dt12"
+                   [owlDateTime]="dt12"
+                   [(ngModel)]="dateTimeRange"
+                   [selectMode]="'rangeFrom'"
+                   [min]="min"
+                   class="form-control"
+                   [ngModelOptions]="{standalone: true}"
+                   >
+            <owl-date-time #dt12 required="required"></owl-date-time>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="domain" class="cols-md-2 control-label">End Date and Time</label>
+            <div class="input-group">
+                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons"></div>
+            <div class="input-wrapper">
+            <input [owlDateTimeTrigger]="dt13"
+                   [owlDateTime]="dt13"
+                   [(ngModel)]="dateTimeRange"
+                   [selectMode]="'rangeTo'"
+                   class="form-control"
+                   [ngModelOptions]="{standalone: true}"
+                   >
+            <owl-date-time #dt13 required="required"></owl-date-time>
+            </div>
+            </div>
+        </div>
+          <div class="form-group" *ngIf="areDatesEmpty">
+            <span class="text-danger">Please select dates!</span>
+          </div>
+
+        <div class="form-group">
+          <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-text">
+              <input type="checkbox"  id="isAdminAllowedForVoting" formControlName="isAdminAllowedForVoting">
+            </div>
+          </div>
+          <span class="text-muted pl-4">Is Admin allowed for voting?</span>
+          </div>
+        </div>
+
+        <div class="form-group ">
+          <button type="submit" id="CreatePollBtn" class="btn btn-primary btn-lg btn-block" [disabled]="!pollForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">{{isEditMode ? 'Update' : 'Create'}}</button>
+        </div>
+        <div class="form-group">
+          <div id="loading" *ngIf="isLoading" class="text-center mt-5"><img src="../../../assets/img/loading2.gif" alt="" width="100" height="100"></div>
+        </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<app-notifications></app-notifications>

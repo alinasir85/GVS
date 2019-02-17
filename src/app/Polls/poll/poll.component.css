@@ -1,0 +1,7 @@
+::ng-deep .card .card-header .btn{
+  width: 100%;
+}
+
+::ng-deep .card .card-header.active > a > span {
+  color: red;
+}
