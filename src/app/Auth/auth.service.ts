@@ -22,7 +22,7 @@ export class AuthService {
           this.token = res['userID'];
           this.router.navigate(['home']);
         } else {
-          swal(
+          swal.fire(
             {title: 'OOPS',
               text: res['message'],
               type: 'warning',

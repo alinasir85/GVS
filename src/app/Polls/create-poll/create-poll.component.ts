@@ -131,7 +131,7 @@ export class CreatePollComponent implements OnInit {
         this.pollService.createPoll(poll, options);
         this.pollService.CreatedpollsChanged.subscribe((polls: PollModel[]) => {
           this.isLoading = false;
-          swal(
+          swal.fire(
             {
               title: 'Success',
               text: 'Poll added!',
@@ -145,7 +145,7 @@ export class CreatePollComponent implements OnInit {
           this.pollService.updatePoll(poll, options);
           this.pollService.CreatedpollsChanged.subscribe(() => {
             this.isLoading = false;
-            swal(
+            swal.fire(
               {
                 title: 'Success',
                 text: 'Poll Updated!',

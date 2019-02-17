@@ -77,7 +77,7 @@ export class OptionComponent implements OnInit, OnDestroy {
     };
     this.optionService.castVote(option.pollID, data)
       .subscribe((res) => {
-        swal(
+        swal.fire(
           {title: 'Success',
             text: 'Vote Casted!',
             type: 'success',

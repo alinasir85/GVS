@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PollService} from '../../shared/poll.service';
 import {PollModel} from '../../shared/models/poll.model';
 import {Subscription} from 'rxjs';
+import {AuthService} from '../../Auth/auth.service';
 
 
 @Component({
@@ -13,10 +14,10 @@ export class VoteComponent implements OnInit, OnDestroy {
   polls: PollModel[];
   private userID: string;
   subscription: Subscription;
-  constructor(private pollService: PollService) { }
+  constructor(private pollService: PollService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.userID = localStorage.getItem('userID');
+    this.userID = this.authService.getUserId();
     this.pollService.getPollsForVote(this.userID);
     this.subscription = this.pollService.pollsForVoteChanged.subscribe((polls: PollModel[]) => {
       this.polls = polls;

@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit, OnDestroy {
           this.mSrv.triggerVerifyCodeModal.next(this.registerForm.value);
           this.closeReference.close();
         } else {
-          swal(
+          swal.fire(
             {title: 'OOPS',
               text: 'Email Already Registered!',
               type: 'error',

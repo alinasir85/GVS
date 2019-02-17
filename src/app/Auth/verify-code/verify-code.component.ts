@@ -58,7 +58,7 @@ export class VerifyCodeComponent implements OnInit, OnDestroy {
           this.httpService.post('/registration/registerUser/', register)
             .subscribe( (response) => {
               this.closeReference.close();
-              swal(
+              swal.fire(
                 {title: 'Success',
                   text: 'Registered!',
                   type: 'success',
@@ -67,7 +67,7 @@ export class VerifyCodeComponent implements OnInit, OnDestroy {
               this.mSrv.triggerLoginModal.next('open');
             });
         } else {
-          swal(
+          swal.fire(
             {title: 'OOPS',
               text: 'Invalid Code!',
               type: 'error',

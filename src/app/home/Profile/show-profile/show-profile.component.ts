@@ -36,7 +36,7 @@ export class ShowProfileComponent implements OnInit {
     };
     this.httpService.put(``, data)
       .subscribe((res) => {
-        swal(
+        swal.fire(
           {title: 'Success',
             text: 'Profile updated!',
             type: 'success',

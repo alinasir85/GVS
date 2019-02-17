@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {PollModel} from '../../shared/models/poll.model';
-import {NavigationEnd, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {PollService} from '../../shared/poll.service';
 import swal from 'sweetalert2';
 import {AuthService} from '../../Auth/auth.service';
@@ -42,7 +42,7 @@ export class PollComponent implements OnInit, OnDestroy {
   }
   onDelete(id) {
     this.pollService.deletePoll(id);
-    swal(
+    swal.fire(
       {title: 'Success',
         text: 'Poll Deleted!',
         type: 'success',
