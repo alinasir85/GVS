@@ -30,6 +30,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ShowProfileComponent } from './home/Profile/show-profile/show-profile.component';
 import { NotificationsComponent } from './home/notifications/notifications.component';
+import { DashboardComponent } from './home/dashboard/dashboard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +52,7 @@ import { NotificationsComponent } from './home/notifications/notifications.compo
     CountDownComponent,
     ShowProfileComponent,
     NotificationsComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'my-app'}),

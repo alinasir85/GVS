@@ -1,0 +1,11 @@
+.file {
+  position: relative;
+  overflow: hidden;
+}
+.fileInput {
+  position: absolute;
+  font-size: 50px;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}

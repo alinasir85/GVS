@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="content">
 <!-- MAIN HEADING -->
 <section class="mt-5">
@@ -270,7 +271,7 @@
               <textarea class="form-control" formControlName="message" cols="30" placeholder="Message" rows="5"></textarea>
             </div>
           </div>
-          <button class="btn btn-primary btn-block btn-lg" [disabled]="!contactForm.valid"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1" alt="check">Submit</button>
+          <button class="btn btn-primary btn-block btn-lg" [disabled]="!contactForm.valid" (click)="onContactUs()"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1" alt="check">Submit</button>
         </form>
       </div>
       <div class="col-lg-3 d-none d-lg-block align-self-center">

@@ -13,21 +13,24 @@ import {CreatedPollsComponent} from './Polls/show-polls/created-polls/created-po
 import {AuthGuardService} from './Auth/auth-guard.service';
 import {ShowProfileComponent} from './home/Profile/show-profile/show-profile.component';
 import {NotificationsComponent} from './home/notifications/notifications.component';
+import {DashboardComponent} from './home/dashboard/dashboard.component';
 const routes: Routes = [
   {path: '', component: LandingComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: SignupComponent},
-  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService], canLoad: [AuthGuardService]},
-  {path: 'home/Notifications', component: NotificationsComponent, canActivate: [AuthGuardService]},
-  {path: 'home/Profile', component: ShowProfileComponent, canActivate: [AuthGuardService]},
-  {path: 'home/createPoll', component: CreatePollComponent, canActivate: [AuthGuardService]},
-  {path: 'home/editPoll', component: CreatePollComponent, canActivate: [AuthGuardService]},
-  {path: 'home/vote', component: VoteComponent, canActivate: [AuthGuardService]},
-  {path: 'home/showPolls', component: ShowPollsComponent, children: [
-      {path: 'createdPolls', component: CreatedPollsComponent, canActivate: [AuthGuardService]},
-      {path: 'activeVotedPolls', component: VotedPollsComponent, canActivate: [AuthGuardService]},
-      {path: 'endedPolls', component: EndedPollsComponent, canActivate: [AuthGuardService]}
-    ], canActivate: [AuthGuardService]}
+  {path: 'home', component: HomeComponent, canActivate: [AuthGuardService], canLoad: [AuthGuardService] , children: [
+      {path: 'Dashboard', component: DashboardComponent, canActivate: [AuthGuardService]},
+      {path: 'Notifications', component: NotificationsComponent, canActivate: [AuthGuardService]},
+      {path: 'Profile', component: ShowProfileComponent, canActivate: [AuthGuardService]},
+      {path: 'createPoll', component: CreatePollComponent, canActivate: [AuthGuardService]},
+      {path: 'editPoll', component: CreatePollComponent, canActivate: [AuthGuardService]},
+      {path: 'vote', component: VoteComponent, canActivate: [AuthGuardService]},
+      {path: 'showPolls', component: ShowPollsComponent, children: [
+          {path: 'createdPolls', component: CreatedPollsComponent, canActivate: [AuthGuardService]},
+          {path: 'activeVotedPolls', component: VotedPollsComponent, canActivate: [AuthGuardService]},
+          {path: 'endedPolls', component: EndedPollsComponent, canActivate: [AuthGuardService]}
+        ], canActivate: [AuthGuardService]}
+    ]},
   ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

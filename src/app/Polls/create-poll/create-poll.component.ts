@@ -181,7 +181,7 @@ export class CreatePollComponent implements OnInit {
 
     let fileData = '';
     for(let file of files) {
-      const mimeType = file.type;
+      //const mimeType = file.type;
       const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt|.doc|.docx|.xls|.xlsx)$/;
       if (!regex.test(file.name.toLowerCase())) {
           this.message = 'Only text, excel, word file is supported.';

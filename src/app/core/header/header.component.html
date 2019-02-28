@@ -7,7 +7,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="navbarsDefault">
-      <ul class="navbar-nav ml-auto" (click)="isNavbarCollapsed = !isNavbarCollapse">
+      <ul class="navbar-nav ml-auto" (click)="isNavbarCollapsed = !isNavbarCollapsed">
         <li class="nav-item">
           <a class="nav-link" style="cursor: pointer" (click)="login()">Login</a>
         </li>
@@ -27,6 +27,7 @@
     </div>
   </div>
 </nav>
+<!--
 <nav *ngIf="isHome" class="navbar navbar-expand-md navbar-light fixed-top">
   <div class="container">
     <a class="navbar-brand">
@@ -56,7 +57,7 @@
       </ul>
     </div>
   </div>
-</nav>
+</nav> -->
 <app-login></app-login>
 <app-signup></app-signup>
 <app-verify-code></app-verify-code>

@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class HttpService {
-  api = 'http://generalvotingsystem.pythonanywhere.com';
+  api = 'https://generalvotingsystem.pythonanywhere.com';
   constructor(private http: HttpClient) { }
   get(url) {
     return this.http.get(this.api + url);

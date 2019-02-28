@@ -3,14 +3,16 @@
     <ngb-panel [id]="poll.id">
       <ng-template ngbPanelTitle>
         <span *ngIf="getCurrentDate() < Date(poll.endTime)">
-        <h3 class="text-center font-weight-bold text-capitalize"> {{poll.title}}</h3>
-        <span class="text-dark float-right w-100">
+        <h3 class="float-left text-capitalize"> {{poll.title}}</h3>
+        <span class="text-dark float-right">
+          <b>
           <app-countdown [text]="text" [units]="units" (reached)="dateReached($event)"  [end]="poll.endTime">
           </app-countdown>
+          </b>
         </span>
         </span>
         <span *ngIf="getCurrentDate() > Date(poll.endTime)">
-        <h3 class="float-left font-weight-bold text-capitalize"> {{poll.title}}</h3>
+        <h3 class="float-left text-capitalize"> {{poll.title}}</h3>
         <span class="text-dark float-right">
           <h2>ENDED</h2>
         </span>

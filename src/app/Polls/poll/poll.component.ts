@@ -19,13 +19,13 @@ export class PollComponent implements OnInit, OnDestroy {
     Year: 'Year',
     Month: 'Month',
     Weeks: 'Weeks',
-    Days: 'Days',
-    Hours: 'Hours',
-    Minutes: 'Minutes',
+    Days: 'Days:',
+    Hours: 'Hours:',
+    Minutes: 'Minutes:',
     Seconds: 'Seconds',
     MilliSeconds: 'MilliSeconds'
   };
-  units: any = 'Month | Days | Hours | Minutes | Seconds';
+  units: any = 'Days | Hours | Minutes | Seconds';
   dateReached(event) {
   }
   getCurrentDate() {
@@ -42,12 +42,6 @@ export class PollComponent implements OnInit, OnDestroy {
   }
   onDelete(id) {
     this.pollService.deletePoll(id);
-    swal.fire(
-      {title: 'Success',
-        text: 'Poll Deleted!',
-        type: 'success',
-        allowOutsideClick: false}
-    );
   }
   onEdit(poll: PollModel) {
     this.optionService.getOptions(poll.id);

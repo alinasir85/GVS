@@ -5,6 +5,8 @@ import {PollService} from '../../shared/poll.service';
 import {AuthService} from '../../Auth/auth.service';
 import {NgbModal, NgbModalConfig, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {ModalService} from '../../shared/modal.service';
+import {NotificationsModel} from '../../shared/models/notifications.model';
+import {computeStyle} from '@angular/animations/browser/src/util';
 
 @Component({
   selector: 'app-notifications',
@@ -12,36 +14,21 @@ import {ModalService} from '../../shared/modal.service';
   styleUrls: ['./notifications.component.css']
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
-  @ViewChild('content')
-  private modalRef: TemplateRef<any>;
-  closeReference: NgbModalRef;
-  modalSubscription: Subscription;
 
-  polls: PollModel[];
+  notifications: NotificationsModel[];
   private userID: string;
-  subscription: Subscription;
   constructor(private mSrv: ModalService, private modalService: NgbModal, config: NgbModalConfig,
               private pollService: PollService, private authService: AuthService) {
     config.backdrop = 'static';
     config.keyboard = false;
   }
   ngOnInit() {
-    this.modalSubscription  = this.mSrv.triggerNotificationsModal.subscribe((status: string) => {
-      this.openModal(this.modalRef);
-      this.closeReference.result.then(() => {} , () => {});
-    });
-
     this.userID = this.authService.getUserId();
-    this.pollService.getCastedVotedPolls(this.userID);
-    this.subscription = this.pollService.CastedVotepollsChanged.subscribe((polls: PollModel[]) => {
-      this.polls = this.pollService.getEndedPoll();
+    this.pollService.getNotifications(this.userID).subscribe((res: NotificationsModel[]) => {
+      this.notifications = res;
     });
   }
-  openModal(content) {
-    this.closeReference = this.modalService.open(content, { centered: true });
-  }
+
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-    this.modalSubscription.unsubscribe();
   }
 }

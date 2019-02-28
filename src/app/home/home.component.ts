@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../Auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +9,15 @@ import {ActivatedRoute, Router} from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  isToggle = false;
+  constructor(private router: Router, private route: ActivatedRoute, private authService: AuthService) { }
 
   ngOnInit() {
   }
-  createPoll() {
-    this.router.navigate(['home/createPoll']);
+  toggle() {
+    this.isToggle = !this.isToggle;
   }
-  castVote() {
-    this.router.navigate(['home/vote']);
-  }
-  showPolls() {
-    this.router.navigate(['home/showPolls']);
+  logOut() {
+    this.authService.logOut();
   }
 }

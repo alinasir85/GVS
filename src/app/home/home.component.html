@@ -1,3 +1,4 @@
+<!--
 <section id="homeCards" class="content">
   <div class="p-3">
     <div class="row">
@@ -28,4 +29,69 @@
     </div>
   </div>
 </section>
-<app-notifications></app-notifications>
+<app-notifications></app-notifications>  -->
+<div class="d-flex" id="wrapper" [ngClass]="isToggle ? 'toggled' : '' ">
+  <!-- Sidebar -->
+  <div class="bg-light border-right" id="sidebar-wrapper">
+    <div class="sidebar-heading">
+      <img id="profile" class="img-fluid" src="../../../assets/img/icons/profile.png" alt="Avatar">
+    </div>
+    <div class="list-group list-group-flush">
+      <a style="cursor: pointer"  routerLink="Dashboard" class="list-group-item list-group-item-action bg-light" (click)="toggle()">
+        <img src="../../../assets/img/icons/dashboard.png" alt="dashboard">
+        <span class="pl-2 text-dark"><b>Dashboard</b></span>
+      </a>
+      <a style="cursor: pointer" routerLink="vote" class="list-group-item list-group-item-action bg-light" (click)="toggle()">
+        <img class="icons" src="../../../assets/img/icons/vote.png" alt="vote">
+        <span class="pl-2 text-dark"><b>Vote</b></span>
+      </a>
+      <a  style="cursor: pointer" ngbDropdown (mouseleave)="myDrop.close()"  #myDrop="ngbDropdown" class=" w-100 list-group-item list-group-item-action bg-light">
+        <div id="dropdownBasic1" (mouseover)="myDrop.open();" ngbDropdownToggle>
+          <img class="icons" src="../../../assets/img/icons/Polls.png">
+          <span class="pl-2 text-dark"><b>Polls</b></span>
+        </div>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button style="cursor: pointer" routerLink="createPoll" (click)="toggle()" class="dropdown-item">Create Poll</button>
+          <button style="cursor: pointer" routerLink="showPolls" (click)="toggle()" class="dropdown-item">Show Polls</button>
+          <button class="dropdown-item">Something else is here</button>
+        </div>
+      </a>
+      <a style="cursor: pointer" routerLink="Profile" class="list-group-item list-group-item-action bg-light" (click)="toggle()">
+        <img class="icons" src="../../../assets/img/icons/user.png" alt="profile">
+        <span class="pl-2 text-dark"><b>Profile</b></span>
+      </a>
+      <a style="cursor: pointer" routerLink="Profile" class="list-group-item list-group-item-action bg-light" (click)="toggle()">
+        <img class="icons" src="../../../assets/img/icons/stats.png" alt="profile">
+        <span class="pl-2 text-dark"><b>Statistics</b></span>
+      </a>
+      <a style="cursor: pointer" [routerLink]="" class="list-group-item list-group-item-action bg-light" (click)="logOut()">
+        <img class="icons" src="../../../assets/img/icons/logout.png" alt="logout">
+        <span class="pl-2 text-dark"><b>Logout</b></span>
+      </a>
+
+    </div>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+      <button class="btn btn-light" id="menu-toggle" (click)="toggle()"><span class="navbar-toggler-icon"></span></button>
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link">
+            <img src="../../../assets/img/logoTrans.png" width="120">
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+
+    <div class="container-fluid">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+

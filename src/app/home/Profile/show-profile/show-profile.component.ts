@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
+import {mimeType} from '../../../Auth/signup/mime-type.validator';
 
 @Component({
   selector: 'app-show-profile',
@@ -11,10 +12,13 @@ import {HttpClient} from '@angular/common/http';
 export class ShowProfileComponent implements OnInit {
   registerForm: FormGroup;
   isLoading = false;
+  message: string;
+  imagePreview;
   constructor(private httpService: HttpClient) { }
 
   ngOnInit() {
     this.initForm();
+    this.imagePreview = '../../../assets/img/icons/profile.png';
   }
   initForm() {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -24,7 +28,11 @@ export class ShowProfileComponent implements OnInit {
         Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
       'password' : new FormControl(user.password, [Validators.required, Validators.minLength(8), Validators.pattern(/^[a-zA-Z0-9_]*$/)]),
       'phone' : new FormControl({value: null, disabled: true},[Validators.pattern(/^[0-9]+$/),
-        Validators.maxLength(11), Validators.minLength(11)])
+        Validators.maxLength(11), Validators.minLength(11)]),
+      'image': new FormControl('null', {
+        validators: [Validators.required],
+        asyncValidators: [mimeType]
+      })
     });
   }
   update() {
@@ -45,5 +53,24 @@ export class ShowProfileComponent implements OnInit {
         this.isLoading = false;
         this.registerForm.reset();
       });
+  }
+  onImagePicked(event: Event) {
+    const file = (event.target as HTMLInputElement).files[0];
+    const regex = /(.*?)\.(jpg|bmp|jpeg|png)$/;
+    if (!regex.test(file.name.toLowerCase())) {
+      this.message = 'Not valid image type.';
+      this.imagePreview = '';
+      return;
+    } else {
+      this.message = '';
+    }
+    this.registerForm.patchValue({ image: file });
+    this.registerForm.get("image").updateValueAndValidity();
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = <ArrayBuffer> reader.result;
+      console.log(this.imagePreview);
+    };
+    reader.readAsDataURL(file);
   }
 }

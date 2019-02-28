@@ -3,6 +3,7 @@ import {HttpService} from './http.service';
 import {PollModel} from './models/poll.model';
 import {Subject} from 'rxjs';
 import {OptionModel} from './models/option.model';
+import swal from "sweetalert2";
 
 @Injectable({
   providedIn: 'root'
@@ -99,5 +100,17 @@ export class PollService {
   deletePoll(id) {
     this.Createdpolls = this.Createdpolls.filter(poll => poll.id !== id);
     this.CreatedpollsDataArrived.next([...this.Createdpolls]);
+    this.httpService.delete(`/voting/deletePoll/${id}/`)
+      .subscribe(() => {
+        swal.fire(
+          {title: 'Success',
+            text: 'Poll Deleted!',
+            type: 'success',
+            allowOutsideClick: false}
+        );
+      });
+  }
+  getNotifications(userId) {
+     return this.httpService.get(`/voting/pollAddNotification/${userId}/`);
   }
 }

@@ -26,15 +26,11 @@ export class HeaderComponent implements OnInit {
   }
   login() {
     if (this.authService.isAuthenticated())
-    {this.router.navigate(['home']); } else {
+    {
+      this.isHome = true;
+      this.router.navigate(['home']); } else {
       this.modalService.triggerLoginModal.next('open');
     }
-  }
-  logOut() {
-    this.authService.logOut();
-  }
-  profile() {
-    this.router.navigate(['home/Profile'], {relativeTo: this.route});
   }
   notifications() {
     this.modalService.triggerNotificationsModal.next('open');

@@ -1,7 +1,17 @@
-<div class="container content pt-2 pb-2">
+<div class="container pb-2">
   <div class="row justify-content-center">
-  <div class="col-md-6">
+  <div class="col-md-10">
   <form class="mt-5" [formGroup]="registerForm">
+    <div class="form-group">
+      <div style="cursor: pointer" class="mb-1 file btn btn-primary">
+        <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload">Select Picture
+        <input style="cursor: pointer" type="file" #filePicker class="fileInput" (change)="onImagePicked($event)" accept="image/*">
+      </div>
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && registerForm.get('image').valid">
+        <img class="img-fluid" style="width: 60%; height: 60%" [src]="imagePreview" [alt]="registerForm.value.title">
+      </div>
+      <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
+    </div>
     <div class="form-group">
       <div class="input-group">
         <span class="input-group-text"><img src="../../../assets/img/icons/user.png" class="addon-icons" alt="user"></span>

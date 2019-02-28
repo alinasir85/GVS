@@ -1,6 +1,5 @@
-<div class="container content pt-3 pb-3">
-  <div class="row main justify-content-center mt-2">
-    <div class="col-md-8 col-sm-12 p-5 bg-white rounded-top" id="createPoll">
+ <div class="row main justify-content-center m-2">
+    <div class="col-md-10 col-sm-12 p-5 bg-white rounded-top" id="createPoll">
       <form [formGroup]="pollForm"  (ngSubmit)="onSubmit()">
         <div class="project">
           <h2 class="text-center text-primary">
@@ -9,7 +8,7 @@
           <div class="form-group">
             <label for="title" class="cols-sm-2 control-label">Title</label>
               <div class="input-group">
-                <span class="input-group-text"><img src="../../../assets/img/icons/title.png" class="addon-icons"></span>
+                <span class="input-group-text"><img src="../../../assets/img/icons/title.png" class="addon-icons" alt="title"></span>
                 <input type="text" class="form-control" name="title" id="title"  placeholder="Enter Title" formControlName="title"/>
               </div>
             <div *ngIf="pollForm.controls['title'].errors && pollForm.controls['title'].touched">
@@ -21,7 +20,7 @@
             <label for="outline" class="cols-sm-2 control-label">Outline</label>
             <div class="cols-sm-10">
               <div class="input-group">
-                <span class="input-group-text"><img src="../../../assets/img/icons/outline.png" class="addon-icons"></span>
+                <span class="input-group-text"><img src="../../../assets/img/icons/outline.png" class="addon-icons" alt="outline"></span>
                 <input type="text" class="form-control" name="outline" id="outline"  placeholder="Outline" formControlName="question_outline"/>
               </div>
             </div>
@@ -34,7 +33,7 @@
             <label for="description" class="cols-sm-2 control-label">Description</label>
             <div class="cols-sm-10">
               <div class="input-group">
-                <span class="input-group-text"><img src="../../../assets/img/icons/description.png" class="addon-icons"></span>
+                <span class="input-group-text"><img src="../../../assets/img/icons/description.png" class="addon-icons" alt="description"></span>
                 <input type="text" class="form-control" name="description" id="description"  placeholder="Description" formControlName="description"/>
               </div>
             </div>
@@ -57,7 +56,7 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-text">
-                      <img src="../../../assets/img/icons/title.png" class="addon-icons">
+                      <img src="../../../assets/img/icons/title.png" class="addon-icons" alt="title">
                     </div>
                     <input type="text" class="form-control"  placeholder="Option" formControlName="optName">
                   </div>
@@ -71,7 +70,7 @@
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-text">
-                      <img src="../../../assets/img/icons/description.png" class="addon-icons">
+                      <img src="../../../assets/img/icons/description.png" class="addon-icons" alt="description">
                     </div>
                     <input type="text" class="form-control" placeholder="Description" formControlName="optDescription">
                   </div>
@@ -99,19 +98,22 @@
             <label for="domain" class="cols-md-2 control-label">By Domain</label>
             <div class="cols-md-3">
               <div class="input-group">
-                <span class="input-group-text"><img src="../../../assets/img/icons/domain.png" class="addon-icons"></span>
-                <textarea class="form-control" id="domain"  placeholder="Domain Addresses must be Comma, Space or Line Separated!" formControlName="pollCriteria_domain"></textarea>
+                <span class="input-group-text"><img src="../../../assets/img/icons/domain.png" class="addon-icons" alt="domain"></span>
+                <textarea class="form-control" id="domain" data-role="tagsinput" placeholder="Domain Addresses must be Comma, Space or Line Separated!" formControlName="pollCriteria_domain"></textarea>
               </div>
             </div>
               <div *ngIf="!areDomainsValid && !isCriteriaEmpty" class="text-danger">*  Domain Addresses must be valid and Comma, Space or Line Separated!</div>
-            <input multiple #file name="domain" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
-                   (change)="onFileSelected(file.files,$event)">
+            <div style="cursor: pointer" class="mt-1 file btn btn-primary">
+              <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload"> Select File
+              <input style="cursor: pointer" multiple #file1 class="fileInput" name="domain" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+                     (change)="onFileSelected(file1.files,$event)">
+            </div>
           </div>
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">By Email</label>
             <div class="cols-md-3">
               <div class="input-group">
-                <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons"></span>
+                <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons" alt="email"></span>
                 <textarea class="form-control" id="email" formControlName="pollCriteria_emails"
                 placeholder="Email Addresses must be Comma, Space or Line Separated!">
                 </textarea>
@@ -120,14 +122,17 @@
             </div>
             <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be valid and Comma, Space or Line Separated!</div>
             <div *ngIf="isCriteriaEmpty" class="text-danger">*  Either domains or emails must be specified!</div>
-            <input multiple #file name="email" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
-                   (change)="onFileSelected(file.files,$event)">
+            <div style="cursor: pointer" class="mt-1 file btn btn-primary">
+              <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload">Select File
+              <input style="cursor: pointer" multiple #file2 class="fileInput" name="email" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+                     (change)="onFileSelected(file2.files,$event)">
+            </div>
             <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
           </div>
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">Start Date and Time</label>
             <div class="input-group">
-                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons"></div>
+                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons" alt="startDate"></div>
               <div class="input-wrapper">
             <input [owlDateTimeTrigger]="dt12"
                    [owlDateTime]="dt12"
@@ -144,7 +149,7 @@
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">End Date and Time</label>
             <div class="input-group">
-                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons"></div>
+                <div class="input-group-text"><img src="../../../assets/img/icons/calendar.png" class="addon-icons" alt="endDate"></div>
             <div class="input-wrapper">
             <input [owlDateTimeTrigger]="dt13"
                    [owlDateTime]="dt13"
@@ -182,5 +187,3 @@
       </form>
     </div>
   </div>
-</div>
-<app-notifications></app-notifications>
