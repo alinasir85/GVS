@@ -20,6 +20,9 @@ export class OptionService {
         this.OptionsChanged.next(this.options);
       });
   }
+  getOptionsForEdit(pollId) {
+    return this.httpService.get(`/voting/options/${pollId}/`);
+  }
   getVotedOptionID() {
    return this.httpService.get(`/voting/voterlist/`);
   }

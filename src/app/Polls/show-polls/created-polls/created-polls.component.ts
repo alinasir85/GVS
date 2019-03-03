@@ -14,7 +14,6 @@ export class CreatedPollsComponent implements OnInit, OnDestroy {
   private userID: string;
   subscription: Subscription;
   constructor(private pollService: PollService, private authService: AuthService) { }
-
   ngOnInit() {
     this.userID = this.authService.getUserId();
     this.pollService.getCreatedPolls(this.userID);

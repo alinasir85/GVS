@@ -11,7 +11,7 @@ import {AuthService} from '../../Auth/auth.service';
   styleUrls: ['./vote.component.css']
 })
 export class VoteComponent implements OnInit, OnDestroy {
-  polls: PollModel[];
+  polls: PollModel[] = [];
   private userID: string;
   subscription: Subscription;
   constructor(private pollService: PollService, private authService: AuthService) { }
@@ -20,7 +20,11 @@ export class VoteComponent implements OnInit, OnDestroy {
     this.userID = this.authService.getUserId();
     this.pollService.getPollsForVote(this.userID);
     this.subscription = this.pollService.pollsForVoteChanged.subscribe((polls: PollModel[]) => {
-      this.polls = polls;
+      for(let poll of polls){
+        if(new Date (poll.startTime) < new Date()) {
+          this.polls.push(poll);
+        }
+      }
     });
   }
   ngOnDestroy(): void {

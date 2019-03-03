@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
     if (this.authService.isAuthenticated())
     {
       this.isHome = true;
-      this.router.navigate(['home']); } else {
+      this.router.navigate(['home/Dashboard']); } else {
       this.modalService.triggerLoginModal.next('open');
     }
   }

@@ -1,8 +1,10 @@
-<div class="card">
-  <div class="card-body" *ngFor="let notification of notifications">
-    {{notification.type === 'pollAdd' ? 'Poll Added' : ''}}
-    {{notification.type === 'pollStats' ? 'Poll Ended' : ''}}
-    {{notification.type === 'pollEnd' ? 'Poll is going to end' : ''}}
+<div class="card text-white bg-info" style="cursor: pointer" *ngFor="let notification of notifications; let i = index;" (click)="onClicked(notification)">
+  <div class="card-body">
+    <div class="card-text">
+      <img src="../../../assets/img/icons/info.png" alt="info" class="icons mr-3">
+      <span (click)="onClicked(notification)">{{notification.message}}</span>
+      <button class="btn btn-sm float-right  btn-danger" (click)="onDelete(i)">x</button>
+    </div>
   </div>
 </div>
 

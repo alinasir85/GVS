@@ -20,7 +20,7 @@ export class AuthService {
         if (res['isVerified'] === true) {
           localStorage.setItem('user', res['userID']);
           this.token = res['userID'];
-          this.router.navigate(['home']);
+          this.router.navigate(['home/Dashboard']);
         } else {
           swal.fire(
             {title: 'OOPS',

@@ -17,6 +17,9 @@ export class CreatePollComponent implements OnInit {
   public pollForm: FormGroup;
   isLoading = false;
   isEditMode = false;
+  isPollStarted = false;
+  editPollid = 0;
+  fixedOptionsCount = 1;
   public dateTimeRange: Date[] = new Array<Date>();
   public min = new Date();
   public areDatesEmpty = false;
@@ -44,33 +47,45 @@ export class CreatePollComponent implements OnInit {
     if(this.isEditMode) {
      const poll: PollModel = JSON.parse(localStorage.getItem('poll'));
      const editOptions: OptionModel[] = JSON.parse(localStorage.getItem('options'));
+     this.fixedOptionsCount = editOptions.length - 1;
+     this.editPollid = poll.id;
+     if(new Date(poll.startTime) < new Date()) {
+       this.isPollStarted = true;
+     }
      title = poll.title;
      question_outline = poll.question_outline;
      description = poll.description;
      pollCriteria_domain = poll.pollCriteria_domain;
      pollCriteria_emails = poll.pollCriteria_emails;
      isAdminAllowedForVoting = true;
-     console.log(poll.isAdminAllowedForVoting);
+     //console.log(poll.isAdminAllowedForVoting);
      for(let option of editOptions) {
        options.push(
          new FormGroup({
-           'optName': new FormControl(option.title, Validators.required),
-           'optDescription': new FormControl(option.description, Validators.required)
+           'optName': new FormControl({value: option.title, disabled: this.isEditMode}, Validators.required),
+           'optDescription': new FormControl({value: option.description, disabled: this.isEditMode}, Validators.required),
+           'id': new FormControl(option.id),
+           'pollID' : new FormControl(poll.id)
          })
        );
      }
       this.dateTimeRange = [new Date(poll.startTime), new Date(poll.endTime)];
-    } else {
+    }
+    else {
       options.push(
         new FormGroup({
           'optName': new FormControl(null, Validators.required),
-          'optDescription': new FormControl(null, Validators.required)
+          'optDescription': new FormControl(null, Validators.required),
+          'id': new FormControl(null),
+          'pollID' : new FormControl(null)
         })
       );
       options.push(
         new FormGroup({
           'optName': new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9? ]*$/)]),
-          'optDescription': new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9? ]*$/)])
+          'optDescription': new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9? ]*$/)]),
+          'id': new FormControl(null),
+          'pollID' : new FormControl(null)
         })
       );
     }
@@ -79,8 +94,8 @@ export class CreatePollComponent implements OnInit {
       'question_outline' : new FormControl(question_outline, [Validators.required, Validators.pattern(/^[a-zA-Z0-9? ]*$/)]),
       'description' : new FormControl(description, [Validators.required, Validators.pattern(/^[a-zA-Z0-9? ]*$/)]),
       'options' : options,
-      'pollCriteria_domain' : new FormControl(pollCriteria_domain),
-      'pollCriteria_emails'  : new FormControl(pollCriteria_emails),
+      'pollCriteria_domain' : new FormControl({value: pollCriteria_domain, disabled: this.isPollStarted}),
+      'pollCriteria_emails'  : new FormControl({value: pollCriteria_emails, disabled: this.isPollStarted}),
       'isAdminAllowedForVoting': new FormControl(isAdminAllowedForVoting)
     });
   }
@@ -89,8 +104,8 @@ export class CreatePollComponent implements OnInit {
     this.areEmailsValid = true;
     this.areDomainsValid = true;
     this.isCriteriaEmpty = false;
-    const criteriaDomains: string = this.pollForm.value.pollCriteria_domain;
-    const criteriaEmails: string = this.pollForm.value.pollCriteria_emails;
+    const criteriaDomains: string = this.pollForm.getRawValue().pollCriteria_domain;
+    const criteriaEmails: string = this.pollForm.getRawValue().pollCriteria_emails;
     if ((criteriaDomains === null || criteriaDomains === '') && (criteriaEmails === null || criteriaEmails === '')) {
       this.isCriteriaEmpty = true;
     } else {
@@ -118,15 +133,15 @@ export class CreatePollComponent implements OnInit {
           this.pollForm.value.title,
           this.pollForm.value.question_outline,
           this.pollForm.value.description,
-          this.pollForm.value.pollCriteria_domain,
-          this.pollForm.value.pollCriteria_emails,
+          this.pollForm.getRawValue().pollCriteria_domain,
+          this.pollForm.getRawValue().pollCriteria_emails,
           startTime,
           endTime,
           Number(this.userID),
           adminVoting);
         const options: OptionModel[] = new Array<OptionModel>();
-        for (const option of this.pollForm.value.options) {
-          options.push(new OptionModel(7, option.optName, option.optDescription, 0, poll.id));
+        for (const option of this.pollForm.getRawValue().options) {
+          options.push(new OptionModel(option.id, option.optName, option.optDescription, 0, this.editPollid));
         }
         if(!this.isEditMode) {
         this.pollService.createPoll(poll, options);
@@ -143,7 +158,14 @@ export class CreatePollComponent implements OnInit {
         });
         }
         else {
-          this.pollService.updatePoll(poll, options);
+          poll.id = this.editPollid;
+          let optData = [];
+          for(let option of options) {
+            if(option.id === null) {
+            optData.push({"id": option.id, "title": option.title, "description": option.description, "voteCount": option.voteCount,
+              "pollID": this.editPollid}); }
+          }
+          this.pollService.updatePoll(poll, optData);
           this.pollService.CreatedpollsChanged.subscribe(() => {
             this.isLoading = false;
             swal.fire(
@@ -160,14 +182,16 @@ export class CreatePollComponent implements OnInit {
         }
         this.isEditMode = false;
         this.pollForm.reset();
-        this.router.navigate(['../'], {relativeTo: this.route});
+        this.router.navigate(['../Dashboard'], {relativeTo: this.route});
       }
     }
   }
   addOption() {
     (<FormArray>this.pollForm.get('options')).push(new FormGroup({
       'optName': new FormControl(null, Validators.required),
-      'optDescription': new FormControl(null, Validators.required)
+      'optDescription': new FormControl(null, Validators.required),
+      'id': new FormControl(null),
+      'pollID' : new FormControl(null)
     }));
   }
   deleteOption(index: number) {

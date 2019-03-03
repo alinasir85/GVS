@@ -48,7 +48,7 @@
           <h2 class="text-center text-primary pb-3">
             Options
           </h2>
-          <button type="button" class="btn btn-primary mb-2" (click)="addOption()">+</button>
+          <button type="button" class="btn btn-primary mb-2" (click)="addOption()" *ngIf="!isPollStarted">+</button>
           <div class="row" formArrayName="options">
             <div class="col">
             <div class="row" *ngFor="let optionCtrl of getControls(); let i = index" [formGroupName]="i">
@@ -82,7 +82,7 @@
               </div>
               <div class="col-md-1 col-sm-1">
                 <div class="form-group">
-                  <button type="button" *ngIf="i>1" class="btn btn-danger" (click)="deleteOption(i)">X</button>
+                  <button type="button" *ngIf="i>fixedOptionsCount && !isPollStarted" class="btn btn-danger" (click)="deleteOption(i)">X</button>
                 </div>
               </div>
             </div>
@@ -103,9 +103,10 @@
               </div>
             </div>
               <div *ngIf="!areDomainsValid && !isCriteriaEmpty" class="text-danger">*  Domain Addresses must be valid and Comma, Space or Line Separated!</div>
-            <div style="cursor: pointer" class="mt-1 file btn btn-primary">
+            <div style="cursor: pointer" class="mt-1 file btn btn-primary" *ngIf="!isEditMode">
               <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload"> Select File
-              <input style="cursor: pointer" multiple #file1 class="fileInput" name="domain" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+              <input style="cursor: pointer" multiple #file1 class="fileInput" name="domain" type="file"
+                     accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
                      (change)="onFileSelected(file1.files,$event)">
             </div>
           </div>
@@ -122,7 +123,7 @@
             </div>
             <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be valid and Comma, Space or Line Separated!</div>
             <div *ngIf="isCriteriaEmpty" class="text-danger">*  Either domains or emails must be specified!</div>
-            <div style="cursor: pointer" class="mt-1 file btn btn-primary">
+            <div style="cursor: pointer" class="mt-1 file btn btn-primary" *ngIf="!isEditMode">
               <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload">Select File
               <input style="cursor: pointer" multiple #file2 class="fileInput" name="email" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
                      (change)="onFileSelected(file2.files,$event)">
@@ -141,6 +142,7 @@
                    [min]="min"
                    class="form-control"
                    [ngModelOptions]="{standalone: true}"
+                   [disabled]="isPollStarted"
                    >
             <owl-date-time #dt12 required="required"></owl-date-time>
               </div>
@@ -153,6 +155,7 @@
             <div class="input-wrapper">
             <input [owlDateTimeTrigger]="dt13"
                    [owlDateTime]="dt13"
+                   [min]="dateTimeRange[0]"
                    [(ngModel)]="dateTimeRange"
                    [selectMode]="'rangeTo'"
                    class="form-control"

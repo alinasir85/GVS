@@ -80,13 +80,11 @@ export class PollService {
         this.CreatedpollsChanged.next(this.Createdpolls);
       });
   }
-  updatePoll(editPoll: PollModel, options: OptionModel[]) {
-
-    this.httpService.put('', editPoll)
+  updatePoll(editPoll: PollModel, options) {
+    this.httpService.put(`/voting/updatePoll/${editPoll.id}`, editPoll)
       .subscribe((res) => {
         for (let option of options) {
-          option.pollID = res['id'];
-          this.httpService.put(`/voting/options/${res['id']}/`, option)
+          this.httpService.post(`/voting/options/${editPoll.id}/`, option)
             .subscribe((res2) => {
             });
         }
@@ -94,7 +92,7 @@ export class PollService {
         const editedPollIndex = this.Createdpolls.findIndex(poll => poll.id === editPoll.id);
         updatedPolls[editedPollIndex] = editPoll;
         this.Createdpolls = updatedPolls;
-        this.CreatedpollsChanged.next([...this.Createdpolls]);
+        this.CreatedpollsChanged.next(this.Createdpolls);
       });
   }
   deletePoll(id) {
@@ -109,8 +107,5 @@ export class PollService {
             allowOutsideClick: false}
         );
       });
-  }
-  getNotifications(userId) {
-     return this.httpService.get(`/voting/pollAddNotification/${userId}/`);
   }
 }

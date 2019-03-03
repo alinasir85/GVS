@@ -1,20 +1,20 @@
-<ngb-accordion [closeOthers]="true">
+<ngb-accordion [closeOthers]="true" #acc="ngbAccordion">
   <div *ngFor="let poll of polls; let i= index">
-    <ngb-panel [id]="poll.id">
+    <ngb-panel id="{{poll.id}}">
       <ng-template ngbPanelTitle>
         <span *ngIf="getCurrentDate() < Date(poll.endTime)">
-        <h3 class="float-left text-capitalize"> {{poll.title}}</h3>
+         <img src="../../../assets/img/icons/info.png" alt="poll" class="addon-icons float-left mr-2">
+        <b class="float-left text-capitalize"> {{poll.title}}</b>
         <span class="text-dark float-right">
-          <b>
           <app-countdown [text]="text" [units]="units" (reached)="dateReached($event)"  [end]="poll.endTime">
           </app-countdown>
-          </b>
         </span>
         </span>
         <span *ngIf="getCurrentDate() > Date(poll.endTime)">
-        <h3 class="float-left text-capitalize"> {{poll.title}}</h3>
-        <span class="text-dark float-right">
-          <h2>ENDED</h2>
+          <img src="../../../assets/img/icons/info.png" alt="poll" class="addon-icons float-left mr-2">
+        <b class="float-left text-capitalize"> {{poll.title}}</b>
+        <span class="text-danger float-right">
+          <h4>ENDED</h4>
         </span>
         </span>
       </ng-template>
@@ -31,7 +31,7 @@
         <app-option [poll]="poll" [pollIndex]="i"></app-option>
       </div>
     </ng-template>
-  </ngb-panel>
+    </ngb-panel>
   </div>
 </ngb-accordion>
 
