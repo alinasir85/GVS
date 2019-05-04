@@ -17,15 +17,15 @@ export class VoteComponent implements OnInit, OnDestroy {
   constructor(private pollService: PollService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.userID = this.authService.getUserId();
-    this.pollService.getPollsForVote(this.userID);
-    this.subscription = this.pollService.pollsForVoteChanged.subscribe((polls: PollModel[]) => {
-      for(let poll of polls){
-        if(new Date (poll.startTime) < new Date()) {
-          this.polls.push(poll);
+    setInterval(() => {
+      this.userID = this.authService.getUserId();
+      this.pollService.getPollsForVote(this.userID);
+      this.subscription = this.pollService.pollsForVoteChanged.subscribe((polls: PollModel[]) => {
+        if (this.polls.length !== polls.length) {
+          this.polls = polls;
         }
-      }
-    });
+      });
+    }, 2000);
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

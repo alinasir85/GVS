@@ -10,7 +10,7 @@ import {AuthService} from '../../../Auth/auth.service';
   styleUrls: ['./created-polls.component.css']
 })
 export class CreatedPollsComponent implements OnInit, OnDestroy {
-  polls: PollModel[];
+  polls: PollModel[] = [];
   private userID: string;
   subscription: Subscription;
   constructor(private pollService: PollService, private authService: AuthService) { }
@@ -18,8 +18,13 @@ export class CreatedPollsComponent implements OnInit, OnDestroy {
     this.userID = this.authService.getUserId();
     this.pollService.getCreatedPolls(this.userID);
     this.subscription = this.pollService.CreatedpollsDataArrived.subscribe((polls: PollModel[]) => {
-      this.polls = polls;
+      if (this.polls.length !== polls.length) {
+        this.polls = polls;
+      }
+      // console.log(polls);
     });
+    setInterval(() => {
+    }, 2000);
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

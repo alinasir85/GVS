@@ -110,6 +110,7 @@
                      (change)="onFileSelected(file1.files,$event)">
             </div>
           </div>
+
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">By Email</label>
             <div class="cols-md-3">
@@ -118,7 +119,6 @@
                 <textarea class="form-control" id="email" formControlName="pollCriteria_emails"
                 placeholder="Email Addresses must be Comma, Space or Line Separated!">
                 </textarea>
-
               </div>
             </div>
             <div *ngIf="!areEmailsValid && !isCriteriaEmpty" class="text-danger">*  Email Addresses must be valid and Comma, Space or Line Separated!</div>
@@ -130,6 +130,25 @@
             </div>
             <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
           </div>
+
+          <div class="form-group">
+            <label for="domain" class="cols-md-2 control-label">By Phone Numbers</label>
+            <div class="cols-md-3">
+              <div class="input-group">
+                <span class="input-group-text"><img src="../../../assets/img/icons/phone.png" class="addon-icons" alt="phone"></span>
+                <textarea class="form-control" id="phone" formControlName="pollCriteria_phone"
+                          placeholder="Numbers must be Comma, Space or Line Separated!">
+                </textarea>
+              </div>
+            </div>
+            <div style="cursor: pointer" class="mt-1 file btn btn-primary" *ngIf="!isEditMode">
+              <img style="cursor: pointer" class="mr-2" src="../../../../assets/img/icons/upload.png" alt="upload">Select File
+              <input style="cursor: pointer" multiple #file2 class="fileInput" name="phone" type="file" accept=".csv, .docx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, text/plain, application/msword"
+                     (change)="onFileSelected(file2.files,$event)">
+            </div>
+            <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
+          </div>
+
           <div class="form-group">
             <label for="domain" class="cols-md-2 control-label">Start Date and Time</label>
             <div class="input-group">
@@ -168,7 +187,6 @@
           <div class="form-group" *ngIf="areDatesEmpty">
             <span class="text-danger">Please select dates!</span>
           </div>
-
         <div class="form-group">
           <div class="input-group">
           <div class="input-group-prepend">
@@ -179,7 +197,6 @@
           <span class="text-muted pl-4">Is Admin allowed for voting?</span>
           </div>
         </div>
-
         <div class="form-group ">
           <button type="submit" id="CreatePollBtn" class="btn btn-primary btn-lg btn-block" [disabled]="!pollForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">{{isEditMode ? 'Update' : 'Create'}}</button>
         </div>

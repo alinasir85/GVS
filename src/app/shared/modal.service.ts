@@ -10,5 +10,9 @@ export class ModalService {
   triggerRegisterModal = new Subject<string>();
   triggerVerifyCodeModal = new Subject<UserModel>();
   triggerNotificationsModal = new Subject<string>();
+  emailVerified = new Subject<any>();
+  phoneVerified = new Subject<any>();
+  verifyCodeForEmail = new Subject<boolean>();
+  verifyCodeForPhone = new Subject<boolean>();
   constructor() { }
 }

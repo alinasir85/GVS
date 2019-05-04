@@ -28,7 +28,8 @@ export class CreatePollComponent implements OnInit {
   public areEmailsValid = true;
   public isCriteriaEmpty = false;
   message: string;
-  constructor(private pollService: PollService, private authService: AuthService , private router: Router, private route: ActivatedRoute) { }
+  constructor(private pollService: PollService, private authService: AuthService ,
+              private router: Router, private route: ActivatedRoute) { }
   getControls() {
     return (<FormArray> this.pollForm.get('options')).controls;
   }
@@ -42,14 +43,15 @@ export class CreatePollComponent implements OnInit {
     let description = null;
     let pollCriteria_domain = null;
     let  pollCriteria_emails = null;
+    let pollCriteria_phone = null;
     let isAdminAllowedForVoting = null;
     const options = new FormArray([]);
-    if(this.isEditMode) {
+    if (this.isEditMode) {
      const poll: PollModel = JSON.parse(localStorage.getItem('poll'));
      const editOptions: OptionModel[] = JSON.parse(localStorage.getItem('options'));
-     this.fixedOptionsCount = editOptions.length - 1;
+     // this.fixedOptionsCount = editOptions.length - 1;
      this.editPollid = poll.id;
-     if(new Date(poll.startTime) < new Date()) {
+     if (new Date(poll.startTime) < new Date()) {
        this.isPollStarted = true;
      }
      title = poll.title;
@@ -57,21 +59,21 @@ export class CreatePollComponent implements OnInit {
      description = poll.description;
      pollCriteria_domain = poll.pollCriteria_domain;
      pollCriteria_emails = poll.pollCriteria_emails;
+     pollCriteria_phone = poll.pollCriteria_phoneNo;
      isAdminAllowedForVoting = true;
-     //console.log(poll.isAdminAllowedForVoting);
-     for(let option of editOptions) {
+     // console.log(poll.isAdminAllowedForVoting);
+     for (let option of editOptions) {
        options.push(
          new FormGroup({
-           'optName': new FormControl({value: option.title, disabled: this.isEditMode}, Validators.required),
-           'optDescription': new FormControl({value: option.description, disabled: this.isEditMode}, Validators.required),
+           'optName': new FormControl({value: option.title, disabled: this.isPollStarted}, Validators.required),
+           'optDescription': new FormControl({value: option.description, disabled: this.isPollStarted}, Validators.required),
            'id': new FormControl(option.id),
            'pollID' : new FormControl(poll.id)
          })
        );
      }
       this.dateTimeRange = [new Date(poll.startTime), new Date(poll.endTime)];
-    }
-    else {
+    } else {
       options.push(
         new FormGroup({
           'optName': new FormControl(null, Validators.required),
@@ -96,6 +98,7 @@ export class CreatePollComponent implements OnInit {
       'options' : options,
       'pollCriteria_domain' : new FormControl({value: pollCriteria_domain, disabled: this.isPollStarted}),
       'pollCriteria_emails'  : new FormControl({value: pollCriteria_emails, disabled: this.isPollStarted}),
+      'pollCriteria_phone'   : new FormControl({value: pollCriteria_phone, disabled: this.isPollStarted}),
       'isAdminAllowedForVoting': new FormControl(isAdminAllowedForVoting)
     });
   }
@@ -135,6 +138,7 @@ export class CreatePollComponent implements OnInit {
           this.pollForm.value.description,
           this.pollForm.getRawValue().pollCriteria_domain,
           this.pollForm.getRawValue().pollCriteria_emails,
+          this.pollForm.getRawValue().pollCriteria_phone,
           startTime,
           endTime,
           Number(this.userID),
@@ -143,7 +147,7 @@ export class CreatePollComponent implements OnInit {
         for (const option of this.pollForm.getRawValue().options) {
           options.push(new OptionModel(option.id, option.optName, option.optDescription, 0, this.editPollid));
         }
-        if(!this.isEditMode) {
+        if (!this.isEditMode) {
         this.pollService.createPoll(poll, options);
         this.pollService.CreatedpollsChanged.subscribe((polls: PollModel[]) => {
           this.isLoading = false;
@@ -156,16 +160,9 @@ export class CreatePollComponent implements OnInit {
             }
           );
         });
-        }
-        else {
+        } else {
           poll.id = this.editPollid;
-          let optData = [];
-          for(let option of options) {
-            if(option.id === null) {
-            optData.push({"id": option.id, "title": option.title, "description": option.description, "voteCount": option.voteCount,
-              "pollID": this.editPollid}); }
-          }
-          this.pollService.updatePoll(poll, optData);
+          this.pollService.updatePoll(poll, options);
           this.pollService.CreatedpollsChanged.subscribe(() => {
             this.isLoading = false;
             swal.fire(
@@ -204,8 +201,8 @@ export class CreatePollComponent implements OnInit {
     }
 
     let fileData = '';
-    for(let file of files) {
-      //const mimeType = file.type;
+    for (let file of files) {
+      // const mimeType = file.type;
       const regex = /^([a-zA-Z0-9\s_\\.\-:])+(.csv|.txt|.doc|.docx|.xls|.xlsx)$/;
       if (!regex.test(file.name.toLowerCase())) {
           this.message = 'Only text, excel, word file is supported.';
@@ -217,12 +214,14 @@ export class CreatePollComponent implements OnInit {
       reader.readAsText(file);
       reader.onload = () => {
         fileData = fileData + reader.result;
-        if(event.target.name === 'domain')
-        {
+        if (event.target.name === 'domain') {
           this.pollForm.patchValue({'pollCriteria_domain': fileData});
         }
-        if(event.target.name === 'email') {
+        if (event.target.name === 'email') {
           this.pollForm.patchValue({'pollCriteria_emails': fileData});
+        }
+        if (event.target.name === 'phone') {
+          this.pollForm.patchValue({'pollCriteria_phone': fileData});
         }
       };
     }

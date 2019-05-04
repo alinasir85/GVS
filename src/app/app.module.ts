@@ -31,6 +31,23 @@ import { environment } from '../environments/environment';
 import { ShowProfileComponent } from './home/Profile/show-profile/show-profile.component';
 import { NotificationsComponent } from './home/notifications/notifications.component';
 import { DashboardComponent } from './home/dashboard/dashboard.component';
+
+import { AngularFireModule } from '@angular/fire';
+
+// New imports to update based on AngularFire2 version 4
+import { AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import {WindowService} from './window.service';
+
+export const firebaseConfig = {
+  apiKey: 'AIzaSyCAc-G31_dOzKBa_M1K6LSSo-7tflfMNCc',
+  authDomain: 'generalvotingsystem-d6c27.firebaseapp.com',
+  databaseURL: 'https://generalvotingsystem-d6c27.firebaseio.com',
+  projectId: 'generalvotingsystem-d6c27',
+  storageBucket: 'generalvotingsystem-d6c27.appspot.com',
+  messagingSenderId: '120086163673'
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -65,9 +82,12 @@ import { DashboardComponent } from './home/dashboard/dashboard.component';
     SweetAlert2Module.forRoot(),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
-  providers: [AuthService, AuthGuardService],
+  providers: [AuthService, AuthGuardService, WindowService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

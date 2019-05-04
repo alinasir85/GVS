@@ -3,6 +3,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
 import {mimeType} from '../../../Auth/signup/mime-type.validator';
+import {AuthService} from '../../../Auth/auth.service';
+import {UserModel} from '../../../shared/models/user.model';
+import {HttpService} from '../../../shared/http.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-show-profile',
@@ -14,20 +18,26 @@ export class ShowProfileComponent implements OnInit {
   isLoading = false;
   message: string;
   imagePreview;
-  constructor(private httpService: HttpClient) { }
+  userID: string;
+  constructor(private httpService: HttpService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.initForm();
+    this.userID = this.authService.getUserId();
+    this.httpService.get(`/registration/getUser/${this.userID}`).subscribe((user: UserModel) => {
+      this.registerForm.setValue({'name': user.name, 'email': user.email, 'password': user.password,
+        'phoneNo': user.phoneNo, 'image': null});
+      //  localStorage.setItem('userDetails',JSON.stringify(user));
+    });
     this.imagePreview = '../../../assets/img/icons/profile.png';
   }
   initForm() {
-    const user = JSON.parse(localStorage.getItem('user'));
     this.registerForm = new FormGroup({
       'name' : new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z ]*$/)]),
-      'email' : new FormControl({value: user.email, disabled: true}, [Validators.email,
+      'email' : new FormControl({value: null, disabled: true}, [Validators.email,
         Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
-      'password' : new FormControl(user.password, [Validators.required, Validators.minLength(8), Validators.pattern(/^[a-zA-Z0-9_]*$/)]),
-      'phone' : new FormControl({value: null, disabled: true},[Validators.pattern(/^[0-9]+$/),
+      'password' : new FormControl(null, [Validators.required, Validators.minLength(8), Validators.pattern(/^[a-zA-Z0-9_]*$/)]),
+      'phoneNo' : new FormControl({value: null, disabled: true},[Validators.pattern(/^[0-9]+$/),
         Validators.maxLength(11), Validators.minLength(11)]),
       'image': new FormControl('null', {
         validators: [Validators.required],
@@ -37,12 +47,8 @@ export class ShowProfileComponent implements OnInit {
   }
   update() {
     this.isLoading = true;
-    const data = {
-      'email': this.registerForm.value.email,
-      'generateCode': 'new',
-      'verificationStatus': false
-    };
-    this.httpService.put(``, data)
+    const user: UserModel = this.registerForm.getRawValue();
+    this.httpService.put(`/registration/updateProfile/${this.userID}`, user)
       .subscribe((res) => {
         swal.fire(
           {title: 'Success',
@@ -51,6 +57,7 @@ export class ShowProfileComponent implements OnInit {
             allowOutsideClick: false}
         );
         this.isLoading = false;
+        this.router.navigate(['/home/Dashboard']);
         this.registerForm.reset();
       });
   }

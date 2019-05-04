@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       'message': 'Details Matched',
       'userID': null};
    this.authService.login(data);
-   this.isLoading = false;
    this.loginForm.reset();
    this.closeReference.close();
   }

@@ -10,19 +10,23 @@ import {AuthService} from '../../../Auth/auth.service';
   styleUrls: ['./voted-polls.component.css']
 })
 export class VotedPollsComponent implements OnInit, OnDestroy {
-  polls: PollModel[];
+  polls: PollModel[] = [];
   private userID: string;
   subscription: Subscription;
   constructor(private pollService: PollService, private authService: AuthService) { }
   ngOnInit() {
-    this.userID = this.authService.getUserId();
-    this.pollService.getCastedVotedPolls(this.userID);
-    this.subscription = this.pollService.CastedVotepollsChanged.subscribe((polls: PollModel[]) => {
-      this.polls = this.pollService.getActiveVotedPolls();
-    });
+    setInterval(() => {
+      this.userID = this.authService.getUserId();
+      this.pollService.getCastedVotedPolls(this.userID);
+      this.subscription = this.pollService.CastedVotepollsChanged.subscribe((polls: PollModel[]) => {
+        if (this.polls.length !== polls.length) {
+          this.polls = polls;
+        }
+      });
+    }, 2000);
   }
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {this.subscription.unsubscribe(); }
   }
 
 }

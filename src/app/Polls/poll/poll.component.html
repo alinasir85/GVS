@@ -6,6 +6,7 @@
          <img src="../../../assets/img/icons/info.png" alt="poll" class="addon-icons float-left mr-2">
         <b class="float-left text-capitalize"> {{poll.title}}</b>
         <span class="text-dark float-right">
+          <img src="../../../assets/img/icons/clock.gif" alt="clock" style="width: 50px; height: 50px;">
           <app-countdown [text]="text" [units]="units" (reached)="dateReached($event)"  [end]="poll.endTime">
           </app-countdown>
         </span>
@@ -21,7 +22,8 @@
       <ng-template ngbPanelContent>
       <div class="container">
         <div *ngIf="isCreatedPolls" class="float-right">
-          <button class="btn btn-warning pr-2 mr-2" (click)="onEdit(poll)">Edit</button><button class="btn btn-danger" (click)="onDelete(poll.id)">Delete</button>
+          <button *ngIf="getCurrentDate() < Date(poll.endTime)" class="btn btn-warning pr-2 mr-2" (click)="onEdit(poll)">Edit</button>
+          <button class="btn btn-danger" (click)="onDelete(poll.id)">Delete</button>
         </div>
         <b>Outline:</b> {{poll.question_outline}} <br>
         <b>Description:</b> {{poll.description}}<br>

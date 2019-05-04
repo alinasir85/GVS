@@ -13,7 +13,7 @@ export class PollService {
   CreatedpollsDataArrived = new Subject<PollModel[]>();
   pollsForVoteChanged = new Subject<PollModel[]>();
   CastedVotepollsChanged = new Subject<PollModel[]>();
-  pollsForVote: PollModel[] = new Array<PollModel>();
+  pollsForVote: PollModel[] = [];
   Createdpolls: PollModel[] = new Array<PollModel>();
   CastedVotepolls: PollModel[] = new Array<PollModel>();
 
@@ -23,7 +23,7 @@ export class PollService {
       .subscribe((polls: PollModel[]) => {
         this.pollsForVote = [];
         for (let poll of polls) {
-          if (new Date(poll.endTime) > new Date()) {
+          if ((new Date (poll.startTime) < new Date()) && (new Date(poll.endTime) >= new Date())) {
             this.pollsForVote.push(poll);
           }
         }
@@ -32,6 +32,7 @@ export class PollService {
   }
   voteCasted(pollIndex: number) {
     this.pollsForVote.splice(pollIndex, 1);
+    //console.log(this.pollsForVote);
     this.pollsForVoteChanged.next(this.pollsForVote);
   }
   getCastedVotedPolls(userID) {
@@ -80,28 +81,31 @@ export class PollService {
         this.CreatedpollsChanged.next(this.Createdpolls);
       });
   }
-  updatePoll(editPoll: PollModel, options) {
-    this.httpService.put(`/voting/updatePoll/${editPoll.id}`, editPoll)
-      .subscribe((res) => {
-        for (let option of options) {
-          this.httpService.post(`/voting/options/${editPoll.id}/`, option)
-            .subscribe((res2) => {
-            });
-        }
-        const updatedPolls = [...this.Createdpolls];
-        const editedPollIndex = this.Createdpolls.findIndex(poll => poll.id === editPoll.id);
-        updatedPolls[editedPollIndex] = editPoll;
-        this.Createdpolls = updatedPolls;
-        this.CreatedpollsChanged.next(this.Createdpolls);
-      });
+  updatePoll(editPoll: PollModel, options: OptionModel[]) {
+    //console.log(options);
+    //console.log(editPoll);
+    this.httpService.delete(`/voting/deleteOptions/${editPoll.id}/`).subscribe(() => {
+      this.httpService.put(`/voting/updatePoll/${editPoll.id}/`, editPoll)
+        .subscribe((res) => {
+          for (let option of options) {
+            this.httpService.post(`/voting/options/${editPoll.id}/`, option)
+              .subscribe((res2) => {
+              });
+          }
+          const updatedPolls = [...this.Createdpolls];
+          const editedPollIndex = this.Createdpolls.findIndex(poll => poll.id === editPoll.id);
+          updatedPolls[editedPollIndex] = editPoll;
+          this.Createdpolls = updatedPolls;
+          this.CreatedpollsDataArrived.next(this.Createdpolls);
+          this.CreatedpollsChanged.next(this.Createdpolls);
+        });
+    });
   }
   deletePoll(id) {
-    this.Createdpolls = this.Createdpolls.filter(poll => poll.id !== id);
-    this.CreatedpollsDataArrived.next([...this.Createdpolls]);
     this.httpService.delete(`/voting/deletePoll/${id}/`)
       .subscribe(() => {
         swal.fire(
-          {title: 'Success',
+          {title: 'Deleted!',
             text: 'Poll Deleted!',
             type: 'success',
             allowOutsideClick: false}

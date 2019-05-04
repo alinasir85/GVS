@@ -18,7 +18,8 @@ import {not} from 'rxjs/internal-compatibility';
 })
 export class NotificationsComponent implements OnInit, OnDestroy {
 
-  notifications: NotificationsModel[];
+  notifications: NotificationsModel[] = [];
+  subscription: Subscription;
   isDelete = false;
   private userID: string;
   constructor(private mSrv: ModalService, private modalService: NgbModal, config: NgbModalConfig,
@@ -28,38 +29,62 @@ export class NotificationsComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.userID = this.authService.getUserId();
-    this.notificationService.getNotifications(this.userID).subscribe((res: NotificationsModel[]) => {
-      this.notifications = res;
-      for(let i=0 ; i < this.notifications.length ; i++) {
-        if(this.notifications[i].type === 'pollAdd') {
-          this.notifications[i].message = 'Poll Added!'
+    setInterval(() => {
+     this.subscription = this.notificationService.getNotifications(this.userID).subscribe((res: NotificationsModel[]) => {
+        if (this.notifications.length !== res.length) {
+          this.notifications = res;
+          for (let i = 0 ; i < this.notifications.length ; i++) {
+            if (this.notifications[i].type !== '' || this.notifications[i].pollType !== '') {
+              if (this.notifications[i].type === 'pollAdd' || this.notifications[i].pollType === 'castVotePolls') {
+                this.notifications[i].message = `Added in Poll ${this.notifications[i].name} !`;
+              }
+              if (this.notifications[i].type === 'pollStats') {
+                this.notifications[i].message = `Poll ${this.notifications[i].name} Ended!`;
+              }
+              if (this.notifications[i].type === 'pollEnd') {
+                this.notifications[i].message = `Poll ${this.notifications[i].name}  is going to end!`;
+              }
+            }
+          }
         }
-        if(this.notifications[i].type === 'pollStats') {
-          this.notifications[i].message = 'Poll Ended!'
-        }
-        if(this.notifications[i].type === 'pollEnd') {
-          this.notifications[i].message = 'Poll is going to end!'
-        }
-      }
-    });
+      });
+    }, 2000);
   }
 
   onClicked(notification: NotificationsModel) {
-    if(notification.type === 'pollAdd') {
-      localStorage.setItem('activePoll',String(notification.pollId));
+   // console.log(notification);
+    if (notification.type === 'pollAdd' && notification.pollType === 'castVotePolls') {
+      localStorage.setItem('activePoll', String(notification.pollId));
+      this.router.navigate(['/home/vote']);
+    }
+    if (notification.type === 'pollAdd' && notification.pollType === 'castedVotePolls') {
+      localStorage.setItem('activePoll', String(notification.pollId));
+      this.router.navigate(['/home/showPolls/activeVotedPolls']);
+    }
+    if (notification.type === 'pollAdd' && notification.pollType === 'createdPolls') {
+      localStorage.setItem('activePoll', String(notification.pollId));
       this.router.navigate(['/home/showPolls/createdPolls']);
     }
-    if(notification.type === 'pollStats') {
+    if (notification.type === 'pollStats' && notification.pollType === 'castedVotePolls') {
+      localStorage.setItem('activePoll', String(notification.pollId));
+      this.router.navigate(['/home/showPolls/endedPolls']);
+    }
+    if (notification.type === 'pollStats' && notification.pollType === 'castVotePolls') {
+      localStorage.setItem('activePoll', String(notification.pollId));
       this.router.navigate(['/home/showPolls/createdPolls']);
     }
-    if(notification.type === 'pollEnd') {
-      this.router.navigate(['/home/showPolls/createdPolls']);
+    if (notification.type === 'pollEnd') {
+      localStorage.setItem('activePoll', String(notification.pollId));
+      this.router.navigate(['/home/vote']);
     }
   }
 
   onDelete(i) {
-    this.notifications.splice(i,1);
+    this.notifications.splice(i, 1);
   }
   ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

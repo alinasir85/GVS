@@ -46,13 +46,13 @@
     <div class="form-group">
       <div class="input-group">
         <span class="input-group-text"><img src="../../../assets/img/icons/phone.png" class="addon-icons"></span>
-        <input class="form-control" id="registerPhone" name="phone" placeholder="Phone" formControlName="phone" type="text">
+        <input class="form-control" id="registerPhone" name="phone" placeholder="Phone" formControlName="phoneNo" type="text">
       </div>
-      <div *ngIf="registerForm.controls['phone'].errors && registerForm.controls['phone'].touched">
-        <div [hidden]="!registerForm.controls['phone'].errors.required" class="text-danger">* Phone Number is required.</div>
-        <div [hidden]="!registerForm.controls['phone'].errors.pattern" class="text-danger">* Numbers only.</div>
-        <div [hidden]="!registerForm.controls['phone'].errors.minlength" class="text-danger">* Must be 11 digits.</div>
-        <div [hidden]="!registerForm.controls['phone'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
+      <div *ngIf="registerForm.controls['phoneNo'].errors && registerForm.controls['phoneNo'].touched">
+        <div [hidden]="!registerForm.controls['phoneNo'].errors.required" class="text-danger">* Phone Number is required.</div>
+        <div [hidden]="!registerForm.controls['phoneNo'].errors.pattern" class="text-danger">* Numbers only.</div>
+        <div [hidden]="!registerForm.controls['phoneNo'].errors.minlength" class="text-danger">* Must be 11 digits.</div>
+        <div [hidden]="!registerForm.controls['phoneNo'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
       </div>
     </div>
     <button class="btn btn-primary btn-block btn-lg text-center" id="RegisterBtn" type="button" (click)="update()" [disabled]="!registerForm.valid || isLoading"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Update</button>

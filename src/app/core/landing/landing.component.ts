@@ -23,14 +23,14 @@ export class LandingComponent implements OnInit {
   }
    initForm() {
     this.contactForm = new FormGroup({
-      'name': new FormControl(null, [Validators.required]),
-      'email': new FormControl(null , [Validators.required]),
-      'message': new FormControl(null, [Validators.required])
+      'name': new FormControl(null, [Validators.required , Validators.pattern(/^[a-zA-Z ]*$/)]),
+      'email': new FormControl(null , [Validators.required, Validators.email, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]),
+      'message': new FormControl(null, [Validators.required, Validators.pattern(/^[a-zA-Z0-9_ ]*$/)])
     });
    }
    onContactUs() {
     const contact = {'email' : this.contactForm.value.email, 'name': this.contactForm.value.name, 'message': this.contactForm.value.message};
-    this.httpService.post(`/registration/contact/`,contact).subscribe(() => {
+    this.httpService.post(`/registration/contact/`, contact).subscribe(() => {
       swal.fire(
         {title: 'Success',
           text: 'Thank you for the feedback!',

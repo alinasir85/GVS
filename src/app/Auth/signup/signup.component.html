@@ -21,6 +21,8 @@
         <div class="input-group">
           <span class="input-group-text"><img src="../../../assets/img/icons/email.png" class="addon-icons"></span>
           <input class="form-control" id="registerEmail" name="email" placeholder="Email" formControlName="email" type="email">
+          <button class="btn btn-sm btn-primary" (click)="verifyEmail()" *ngIf="!isEmailVerified"
+                  [disabled]="!registerForm.controls['email'].valid">Verify</button>
         </div>
         <div *ngIf="registerForm.controls['email'].errors && registerForm.controls['email'].touched">
           <div [hidden]="!registerForm.controls['email'].errors.required" class="text-danger">* Email is required.</div>
@@ -41,18 +43,21 @@
       <div class="form-group">
         <div class="input-group">
           <span class="input-group-text"><img src="../../../assets/img/icons/phone.png" class="addon-icons"></span>
-          <input class="form-control" id="registerPhone" name="phone" placeholder="Phone" formControlName="phone" type="text">
+          <input class="form-control" id="registerPhone" name="phone" placeholder="Phone" formControlName="phoneNo" type="text">
+          <button class="btn btn-sm btn-primary" (click)="verifyPhone()" *ngIf="!isPhoneVerified"
+                  [disabled]="!registerForm.controls['phoneNo'].valid">Verify</button>
         </div>
-        <div *ngIf="registerForm.controls['phone'].errors && registerForm.controls['phone'].touched">
-          <div [hidden]="!registerForm.controls['phone'].errors.required" class="text-danger">* Phone Number is required.</div>
-          <div [hidden]="!registerForm.controls['phone'].errors.pattern" class="text-danger">* Numbers only.</div>
-          <div [hidden]="!registerForm.controls['phone'].errors.minlength" class="text-danger">* Must be 11 digits.</div>
-          <div [hidden]="!registerForm.controls['phone'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
+        <div *ngIf="registerForm.controls['phoneNo'].errors && registerForm.controls['phoneNo'].touched">
+          <div [hidden]="!registerForm.controls['phoneNo'].errors.required" class="text-danger">* Phone Number is required.</div>
+          <div [hidden]="!registerForm.controls['phoneNo'].errors.pattern" class="text-danger">* Numbers only.</div>
+          <div [hidden]="!registerForm.controls['phoneNo'].errors.minlength" class="text-danger">* Must be 11 digits.</div>
+          <div [hidden]="!registerForm.controls['phoneNo'].errors.maxlength" class="text-danger">* Must be 11 digits</div>
         </div>
       </div>
       <div class="form-group">
         <input type="file" #filePicker (change)="onImagePicked($event)" accept="image/*">
         <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && registerForm.get('image').valid">
+          <br>
           <img class="img-fluid" [src]="imagePreview" [alt]="registerForm.value.title">
         </div>
         <div style="color:red;" class="text-center" *ngIf="message">{{message}}</div>
@@ -60,6 +65,10 @@
       <button class="btn btn-primary btn-block btn-lg text-center" id="RegisterBtn" type="button" (click)="Register()" [disabled]="!registerForm.valid || isLoading || !imagePreview"><img src="../../../assets/img/icons/check.png" class="addon-icons pr-1">Sign Up</button>
       <div class="form-group">
         <div class="text-center mt-3" id="loading" *ngIf="isLoading"><img alt="" height="100" src="../../../assets/img/loading2.gif" width="100"></div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" (click)="loginFB()">Facebook</button>
+        <button class = "ml-2 btn btn-warning" (click)="loginG()">Google</button>
       </div>
     </form>
   </div>
